@@ -1,12 +1,11 @@
 import { StyleSheet, Platform, Dimensions, I18nManager } from 'react-native';
-import { COLOR_SECONDARY, COLOR_ORANGE, COLOR_PRIMARY, COLOR_RED, S2, S16, S14,smallTitle ,homeTitle, titleText,eventTitleText,ListingOnOffBtn,InputTextSize,ListingTitle,} from './common';
+import { COLOR_SECONDARY, COLOR_ORANGE, COLOR_PRIMARY, COLOR_RED, S2, S16, S14,smallTitle ,homeTitle, titleText,eventTitleText,ListingOnOffBtn,InputTextSize,ListingTitle, buttonText} from './common';
 import { width, height, totalSize } from 'react-native-dimension';
 const window = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: height(100),
-    backgroundColor: 'yellow',
   },
   IndicatorCon: {
     height: height(100),
@@ -423,6 +422,32 @@ const styles = StyleSheet.create({
     // fontFamily: FONT_NORMAL,
     fontSize: totalSize(S16),
     color: '#ffffff'
+  },
+  signUpBtn: {
+    height: height(6.3),
+    width: width(40),
+    marginTop: 15,
+    borderRadius: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffc400',
+    marginLeft: width(50)
+  },
+  signUpTxt: {
+    fontWeight: 'bold',
+    fontSize: buttonText,
+    color: COLOR_PRIMARY,
+  },
+
+  signUpBtn2: {
+    height: height(6.3),
+    width: width(40),
+    marginTop: 15,
+    borderRadius: 3,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#ffc400',
+    marginLeft: width(30)
   },
 });
 

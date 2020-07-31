@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import Toast from 'react-native-simple-toast';
-import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
-import { NavigationActions } from 'react-navigation';
+import { width } from 'react-native-dimension';
+import styles from './styles/listStyle';
 
 export default class NewPost extends Component<Props> {
 	constructor(props) {
@@ -27,22 +27,22 @@ export default class NewPost extends Component<Props> {
 			}
 		})
 			.then((response) => response.json())
-            .then((json) => alert(json.id));
+			.then((json) => alert(json.id));
 
-            this.setState({
-                title: '',
-                body: '',
-                userId: ''
-            })
-            
+		this.setState({
+			title: '',
+			body: '',
+			userId: ''
+		});
 	}
 
 	render() {
 		return (
-			<View>
+			<View style={styles.container}>
 				<TextInput
 					style={{ width: width(80), alignSelf: 'stretch', paddingHorizontal: 10 }}
 					placeholder="UserId"
+					value={this.state.userId}
 					returnKeyType="next"
 					onChangeText={(value) => {
 						this.setState({ userId: value });
@@ -52,6 +52,7 @@ export default class NewPost extends Component<Props> {
 					style={{ width: width(80), alignSelf: 'stretch', paddingHorizontal: 10 }}
 					placeholder="title"
 					returnKeyType="next"
+					value={this.state.title}
 					onChangeText={(value) => {
 						this.setState({ title: value });
 					}}
@@ -59,16 +60,19 @@ export default class NewPost extends Component<Props> {
 				<TextInput
 					style={{ width: width(80), alignSelf: 'stretch', paddingHorizontal: 10 }}
 					placeholder="Body"
+					value={this.state.body}
 					onChangeText={(value) => {
 						this.setState({ body: value });
 					}}
+					multiline={true}
+					numberOfLines={10}
+					style={{ height: 200, textAlignVertical: 'top' }}
 				/>
 				<TouchableOpacity
-					onPress={() => {
-						this.submit();
-					}}
+					style={[ styles.signUpBtn2, { backgroundColor: 'rgba(0,153,0,0.9)' } ]}
+					onPress={() => this.submit()}
 				>
-					Submit
+					<Text style={styles.signUpTxt}>Create</Text>
 				</TouchableOpacity>
 			</View>
 		);

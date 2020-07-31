@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput } from 'react-native';
-import { NavigationActions } from 'react-navigation';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { width, height, totalSize } from 'react-native-dimension';
+import styles from './styles/listStyle';
 
 export default class UpdatePost extends Component<Props> {
 	constructor(props) {
@@ -10,17 +11,19 @@ export default class UpdatePost extends Component<Props> {
 			body: '',
 			userId: ''
 		};
-  }
-  navigateToScreen = (route, title) => {
-		const navigateAction = NavigationActions.navigate({
-			routeName: route
-		});
-		this.props.navigation.setParams({ otherParam: title });
-		this.props.navigation.dispatch(navigateAction);
-	};
-  
-  submit() {
-    const item = this.props.navigation.getParam('item', 'UpdatePost')
+	}
+
+	componentDidMount(){
+		const item = this.props.navigation.getParam('item', 'UpdatePost');
+		this.setState({
+			title: item.title,
+			body: item.body,
+			userId: item.userId
+		})
+	}	
+
+	submit() {
+		const item = this.props.navigation.getParam('item', 'UpdatePost');
 		fetch('https://jsonplaceholder.typicode.com/posts/' + item.id, {
 			method: 'PUT',
 			body: JSON.stringify({
@@ -34,24 +37,18 @@ export default class UpdatePost extends Component<Props> {
 			}
 		})
 			.then((response) => response.json())
-            .then((json) => {this.navigateToScreen('ViewPost', { item: json })});
-
-            this.setState({
-                title: '',
-                body: '',
-                userId: ''
-            })
-            
+			.then((json) => {
+				this.props.navigation.navigate('ViewPost', { item: json });
+			});
 	}
 
 	render() {
-    const item = this.props.navigation.getParam('item', 'UpdatePost')
 		return (
 			<View>
 				<TextInput
 					style={{ width: width(80), alignSelf: 'stretch', paddingHorizontal: 10 }}
-          placeholder="UserId"
-          value={item.userId}
+					placeholder="UserId"
+					value={this.state.userId}
 					returnKeyType="next"
 					onChangeText={(value) => {
 						this.setState({ userId: value });
@@ -60,7 +57,7 @@ export default class UpdatePost extends Component<Props> {
 				<TextInput
 					style={{ width: width(80), alignSelf: 'stretch', paddingHorizontal: 10 }}
 					placeholder="title"
-          value={item.title}
+					value={this.state.title}
 					returnKeyType="next"
 					onChangeText={(value) => {
 						this.setState({ title: value });
@@ -69,17 +66,19 @@ export default class UpdatePost extends Component<Props> {
 				<TextInput
 					style={{ width: width(80), alignSelf: 'stretch', paddingHorizontal: 10 }}
 					placeholder="Body"
-          value={item.body}
+					value={this.state.body}
 					onChangeText={(value) => {
 						this.setState({ body: value });
 					}}
+					multiline={true}
+					numberOfLines={10}
+					style={{ height: 200, textAlignVertical: 'top' }}
 				/>
 				<TouchableOpacity
-					onPress={() => {
-						this.submit();
-					}}
+					style={[ styles.signUpBtn2, { backgroundColor: 'rgba(0,153,0,0.9)' } ]}
+					onPress={() => this.submit()}
 				>
-					Submit
+					<Text style={styles.signUpTxt}>Update</Text>
 				</TouchableOpacity>
 			</View>
 		);

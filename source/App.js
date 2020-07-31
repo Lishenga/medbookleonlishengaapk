@@ -1,14 +1,5 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, { Component } from 'react';
 import { Text, View, ScrollView, ActivityIndicator, RefreshControl } from 'react-native';
-
 import { NavigationActions } from 'react-navigation';
 import { width, height, totalSize } from 'react-native-dimension';
 import { COLOR_PRIMARY, COLOR_SECONDARY } from './styles/common';
@@ -68,36 +59,42 @@ export default class App extends Component<Props> {
 		});
 	};
 
-	delete(item) {
-		fetch('https://jsonplaceholder.typicode.com/posts/' + item.id, {
+	delete(data) {
+		fetch('https://jsonplaceholder.typicode.com/posts/' + data.id, {
 			method: 'DELETE'
+		}).then((json) => {
+			console.log(json);
 		});
+		const index = this.state.data.findIndex((item) => data.id === item.id);
+		this.state.data.splice(index, 1);
+		this.setState({
+			data:this.state.data
+		})
 	}
 
 	render() {
 		return (
-			<View style={styles.container}>
-				<TouchableOpacity
-					onPress={() => {
-						this.navigateToScreen('NewPost', { item: null });
-					}}
-				>
-					<Text>New Post</Text>
-				</TouchableOpacity>
-				<View style={{ flex: 1, alignItems: 'center' }}>
+			<View>
+				<TouchableOpacity style={[styles.signUpBtn, { backgroundColor: 'rgba(0,153,0,0.9)' }]} onPress={() => this.props.navigation.navigate('NewPost')}>
+              <Text style={styles.signUpTxt}>New Post</Text>
+            </TouchableOpacity>
+				<View>
 					<ScrollView showsVerticalScrollIndicator={false} scrollEventThrottle={400}>
 						{this.state.data.map((item, key) => {
 							return (
 								<View>
 									<TouchableOpacity
-									onPress={() => {
-										this.navigateToScreen('ViewPost', { item: item });
-									}}
-								>
+										onPress={() => {
+											this.props.navigation.navigate('ViewPost', { item: item });
+										}}
+									>
+										<Card>
+											<CardImage source={{ uri: 'http://bit.ly/2GfzooV' }} title={item.title} />
+											<CardTitle subtitle={item.id} />
+											<CardContent text={item.body} />
+										</Card>
+									</TouchableOpacity>
 									<Card>
-										<CardImage source={{ uri: 'http://bit.ly/2GfzooV' }} title={item.title} />
-										<CardTitle subtitle={item.id} />
-										<CardContent text={item.body} />
 										<CardAction separator={true} inColumn={false}>
 											<CardButton
 												onPress={() => {
@@ -108,14 +105,13 @@ export default class App extends Component<Props> {
 											/>
 											<CardButton
 												onPress={() => {
-													this.navigateToScreen('UpdatePost', { item: item });
+													this.props.navigation.navigate('UpdatePost', { item: item });
 												}}
 												title="Update"
 												color="#FEB557"
 											/>
 										</CardAction>
 									</Card>
-								</TouchableOpacity>
 								</View>
 							);
 						})}
